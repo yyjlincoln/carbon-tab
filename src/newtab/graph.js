@@ -45,7 +45,7 @@ export default class Graph {
 
     this.overlay_g = this.overlay_svg.append('g');
 
-    this.overlay_svg.on('mousemove', this.onMousemove.bind(this));
+    // this.overlay_svg.on('mousemove', this.onMousemove.bind(this));
 
     this.legend = this.overlay_g
       .append('g')

@@ -26,7 +26,6 @@
     </div>
     <!-- <img class="logo" src="/public/img/logo-web-safe.svg?emitFile=false"> -->
     <svg id="graph"></svg>
-    <svg id="overlay"></svg>
   </div>
 </template>
 
