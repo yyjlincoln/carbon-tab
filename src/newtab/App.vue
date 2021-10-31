@@ -1,31 +1,54 @@
 <template>
   <div>
-    <h1 class="large-co2-label z-index-1">Current atmospheric CO2 level</h1>
-    <h2 class="large-co2-value z-index-1" v-if="currentCO2 >= 0">{{ currentCO2 }}</h2>
-    <div class="increases z-index-1">
-      <div class="increase">
-        {{ increaseSinceLastYear > 0 ? 'Increased' : 'Decreased' }} by
-        <div class="increase-number">{{ Math.abs(increaseSinceLastYear) }} PPM</div>
-        since last year
+    <div>
+      <!-- Main info -->
+      <h1 class="large-co2-label z-index-1">Current atmospheric CO2 level</h1>
+      <h2 class="large-co2-value z-index-1" v-if="currentCO2 >= 0">{{ currentCO2 }}</h2>
+      <div class="increases z-index-1">
+        <div class="increase">
+          <div class="increase-indicator">
+            <div class="increase-number">{{ Math.abs(increaseSinceLastYear) }} PPM</div>
+            <indicator :up="increaseSinceLastYear > 0"></indicator>
+          </div>
+          since last year
+        </div>
+        <div class="increase">
+          <div class="increase-indicator">
+            <div class="increase-number">{{ Math.abs(increaseSinceLastMonth) }} PPM</div>
+            <indicator :up="increaseSinceLastMonth > 0"></indicator>
+          </div>
+          since last month
+        </div>
+        <div class="increase">
+          <div class="increase-indicator">
+            <div class="increase-number">{{ Math.abs(increaseSinceLastWeek) }} PPM</div>
+            <indicator :up="increaseSinceLastWeek > 0"></indicator>
+          </div>
+          since last week
+        </div>
+        <div class="increase">
+          <div class="increase-indicator">
+            <div class="increase-number">{{ Math.abs(increaseSinceYesterday) }} PPM</div>
+            <indicator :up="increaseSinceYesterday > 0"></indicator>
+          </div>
+          since yesterday
+        </div>
       </div>
-      <div class="increase">
-        {{ increaseSinceLastMonth > 0 ? 'Increased' : 'Decreased' }} by
-        <div class="increase-number">{{ Math.abs(increaseSinceLastMonth) }} PPM</div>
-        since last month
+      <svg id="graph"></svg>
+    </div>
+    <div class="bottom-right-corner">
+      <div style="display: flex; flex-direction: column; padding-top: 1em; padding-bottom: 1em; margin-right: 2em">
+        <p class="adaptive-font-color" style="font-size: 2em; font-color: black; margin: 0; margin-bottom: 0.5em; font-weight: bold">Carbon Emissions Matter</p>
+        <div>
+          <a href="https://github.com/Booligoosh/carbon-tab" class="attribution-font adaptive-font-color">The CarbonTab Project,</a>
+          <a href="https://github.com/yyjlincoln/carbon-tab" class="attribution-font adaptive-font-color">modified</a>.
+        </div>
+        <a href="https://boxicons.com" class="adaptive-font-color attribution-font">"Boxicons" is used in this project</a>
       </div>
-      <div class="increase">
-        {{ increaseSinceLastWeek > 0 ? 'Increased' : 'Decreased' }} by
-        <div class="increase-number">{{ Math.abs(increaseSinceLastWeek) }} PPM</div>
-        since last week
-      </div>
-      <div class="increase">
-        {{ increaseSinceYesterday > 0 ? 'Increased' : 'Decreased' }} by
-        <div class="increase-number">{{ Math.abs(increaseSinceYesterday) }} PPM</div>
-        since yesterday
+      <div>
+        <img src="/public/img/logo.png" class="bottom-logo" />
       </div>
     </div>
-    <!-- <img class="logo" src="/public/img/logo-web-safe.svg?emitFile=false"> -->
-    <svg id="graph"></svg>
   </div>
 </template>
 
@@ -33,12 +56,14 @@
 import store from '../store';
 import axios from 'axios';
 import Graph from './graph.js';
+import indicator from './indicator.vue';
 
 const increaseDecimalPlaces = 2;
 
 var graph;
 
 export default {
+  components: { indicator },
   data() {
     return {};
   },
@@ -116,6 +141,18 @@ export default {
   box-sizing: border-box;
   cursor: default;
 }
+.bottom-right-corner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 5em;
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  text-align: right;
+  vertical-align: bottom;
+}
+
 body {
   margin: 0;
   padding: 5em;
@@ -124,11 +161,32 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   min-height: 100vh;
 }
+.adaptive-font-color {
+  color: hsl(204, 6%, 16%);
+}
 @media screen and (prefers-color-scheme: dark) {
   body {
     background: hsl(204, 6%, 16%);
     color: white;
   }
+  .adaptive-font-color {
+    color: white;
+  }
+}
+.bottom-logo {
+  border-radius: 2em;
+  width: 12em;
+  height: 12em;
+  pointer-events: none;
+  text-align: right;
+}
+.attribution-font {
+  text-decoration: none;
+  font-weight: bold;
+  opacity: 0.5;
+  text-align: right;
+  margin: 0;
+  font-size: 1.5em;
 }
 svg {
   position: absolute;
@@ -183,6 +241,10 @@ svg {
   opacity: 0.5;
   font-weight: 500;
   margin-left: 0.5em;
+}
+.increase-indicator {
+  display: flex;
+  flex-direction: row;
 }
 .logo {
   width: 3rem;
