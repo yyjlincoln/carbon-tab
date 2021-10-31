@@ -37,7 +37,7 @@
       <svg id="graph"></svg>
     </div>
     <div class="bottom-right-corner">
-      <div style="display: flex; flex-direction: column; padding-top: 1em; padding-bottom: 1em; margin-right: 2em">
+      <div style="display: flex; flex-direction: column; padding-top: 1em; padding-bottom: 1em; margin-right: 2em" v-if="showAttribution">
         <p class="adaptive-font-color" style="font-size: 2em; font-color: black; margin: 0; margin-bottom: 0.5em; font-weight: bold">Carbon Emissions Matter</p>
         <div>
           <a href="https://github.com/Booligoosh/carbon-tab" class="attribution-font adaptive-font-color">The CarbonTab Project,</a>
@@ -65,7 +65,9 @@ var graph;
 export default {
   components: { indicator },
   data() {
-    return {};
+    return {
+      showAttribution: true,
+    };
   },
   store,
   created() {
